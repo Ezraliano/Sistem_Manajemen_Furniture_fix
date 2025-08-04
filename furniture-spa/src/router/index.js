@@ -15,6 +15,14 @@ const router = createRouter({
       component: () => import('@/views/Login.vue'),
       meta: { guest: true }
     },
+    // --- RUTE BARU DITAMBAHKAN DI SINI ---
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/Register.vue'), // Pastikan file ini ada
+      meta: { guest: true }
+    },
+    // --- AKHIR DARI RUTE BARU ---
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -84,14 +92,14 @@ const router = createRouter({
   ]
 })
 
-// Navigation guard
+// Navigation guard (Tidak perlu diubah, sudah benar)
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
   // Try to fetch user if not already authenticated
   if (!authStore.isAuthenticated) {
     try {
-      await authStore.fetchUser()
+      await authStore.getUser() // Menggunakan nama fungsi yang konsisten dari jawaban sebelumnya
     } catch (error) {
       // User is not authenticated
     }
@@ -104,7 +112,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Check if route requires admin role
-  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+  if (to.meta.requiresAdmin && authStore.user?.role?.name !== 'admin') { // Pengecekan role yang lebih aman
     next('/dashboard')
     return
   }
