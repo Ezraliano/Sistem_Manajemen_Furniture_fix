@@ -1,17 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
-      <div class="flex h-16 items-center justify-center border-b border-gray-200">
-        <h1 class="text-xl font-bold text-gray-900">Furniture Management</h1>
+    <aside class="w-64 bg-gray-800 h-full">
+      <!-- Logo/Header -->
+      <div class="flex items-center justify-center h-16 bg-gray-900">
+        <h1 class="text-white text-xl font-bold">Furniture Admin</h1>
       </div>
       
-      <nav class="mt-8">
-        <div class="space-y-1">
+      <!-- Navigation -->
+      <nav class="mt-8 px-4">
+        <div class="space-y-2">
           <router-link
             to="/dashboard"
             class="sidebar-link"
-            active-class="active"
           >
             <HomeIcon class="mr-3 h-5 w-5" />
             Dashboard
@@ -20,7 +21,6 @@
           <router-link
             to="/roles"
             class="sidebar-link"
-            active-class="active"
           >
             <UserGroupIcon class="mr-3 h-5 w-5" />
             Roles
@@ -30,7 +30,6 @@
             v-if="authStore.isAdmin"
             to="/users"
             class="sidebar-link"
-            active-class="active"
           >
             <UsersIcon class="mr-3 h-5 w-5" />
             Users
@@ -39,7 +38,6 @@
           <router-link
             to="/categories"
             class="sidebar-link"
-            active-class="active"
           >
             <TagIcon class="mr-3 h-5 w-5" />
             Categories
@@ -48,7 +46,6 @@
           <router-link
             to="/products"
             class="sidebar-link"
-            active-class="active"
           >
             <CubeIcon class="mr-3 h-5 w-5" />
             Products
@@ -57,7 +54,6 @@
           <router-link
             to="/orders"
             class="sidebar-link"
-            active-class="active"
           >
             <ShoppingCartIcon class="mr-3 h-5 w-5" />
             Orders
@@ -66,31 +62,36 @@
       </nav>
       
       <!-- User info and logout -->
-      <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+      <div class="absolute bottom-0 left-0 right-0 w-64 p-4 bg-gray-900">
         <div class="flex items-center">
-          <div class="flex-1">
-            <p class="text-sm font-medium text-gray-900">{{ authStore.user?.name }}</p>
-            <p class="text-xs text-gray-500">{{ authStore.user?.role?.name }}</p>
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-sm font-medium">
+                {{ authStore.user?.name?.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+          </div>
+          <div class="ml-3 flex-1">
+            <p class="text-sm font-medium text-white">{{ authStore.user?.name }}</p>
+            <p class="text-xs text-gray-300">{{ authStore.user?.role?.name }}</p>
           </div>
           <button
             @click="handleLogout"
-            class="ml-3 text-gray-400 hover:text-gray-500"
+            class="ml-3 text-gray-300 hover:text-white transition-colors duration-200"
             title="Logout"
           >
             <ArrowRightOnRectangleIcon class="h-5 w-5" />
           </button>
         </div>
       </div>
-    </div>
+    </aside>
 
     <!-- Main content -->
-    <div class="pl-64">
-      <main class="py-6">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <slot />
-        </div>
-      </main>
-    </div>
+    <main class="flex-1 overflow-y-auto">
+      <div class="p-8">
+        <router-view />
+      </div>
+    </main>
   </div>
 </template>
 

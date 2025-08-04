@@ -9,7 +9,8 @@
           type="email"
           required
           class="form-input"
-          :class="{ 'border-red-300': errors.email }"
+          :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }"
+          placeholder="Enter your email"
         />
         <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
       </div>
@@ -22,13 +23,21 @@
           type="password"
           required
           class="form-input"
-          :class="{ 'border-red-300': errors.password }"
+          :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password }"
+          placeholder="Enter your password"
         />
         <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password[0] }}</p>
       </div>
 
       <div v-if="generalError" class="rounded-md bg-red-50 p-4">
-        <p class="text-sm text-red-800">{{ generalError }}</p>
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <ExclamationTriangleIcon class="h-5 w-5 text-red-400" />
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-800">{{ generalError }}</p>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -49,6 +58,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import GuestLayout from '@/layouts/GuestLayout.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
