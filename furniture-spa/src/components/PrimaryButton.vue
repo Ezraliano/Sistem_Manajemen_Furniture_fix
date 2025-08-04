@@ -1,1 +1,26 @@
-{"code":"rate-limited","message":"You have hit the rate limit. Please upgrade to keep chatting.","providerLimitHit":false,"isRetryable":true}
+<template>
+  <button
+    :type="type"
+    :disabled="disabled"
+    class="btn-primary"
+    :class="[
+      disabled && 'opacity-50 cursor-not-allowed',
+      $attrs.class
+    ]"
+  >
+    <slot />
+  </button>
+</template>
+
+<script setup>
+defineProps({
+  type: {
+    type: String,
+    default: 'button'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
+</script>

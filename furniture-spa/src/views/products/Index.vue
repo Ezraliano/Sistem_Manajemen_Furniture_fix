@@ -1,28 +1,31 @@
 <template>
   <AppLayout>
+    <!-- Page Header -->
     <div class="mb-8">
-      <div class="sm:flex sm:items-center">
-        <div class="sm:flex-auto">
-          <h1 class="text-3xl font-bold text-gray-900">Products</h1>
-          <p class="mt-2 text-sm text-gray-700">Manage your furniture inventory</p>
-        </div>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <PrimaryButton @click="showCreateModal = true">
-            Create New Product
-          </PrimaryButton>
-        </div>
-      </div>
+      <h1 class="text-3xl font-bold text-gray-900">Products</h1>
+      <p class="mt-2 text-sm text-gray-600">Manage your furniture inventory</p>
     </div>
 
-    <!-- Search -->
-    <div class="mb-6">
-      <div class="max-w-md">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search products..."
-          class="form-input"
-        />
+    <!-- Action Bar -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="max-w-md flex-1">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search products..."
+            class="form-input pl-10"
+          />
+        </div>
+      </div>
+      <div class="ml-4">
+        <PrimaryButton @click="showCreateModal = true">
+          <PlusIcon class="h-4 w-4 mr-2" />
+          Create New Product
+        </PrimaryButton>
       </div>
     </div>
 
@@ -30,30 +33,50 @@
     <LoadingSpinner v-if="loading" />
 
     <!-- Data Table -->
-    <DataTable
-      v-else
-      :columns="columns"
-      :data="filteredProducts"
-      @view="viewProduct"
-      @edit="editProduct"
-      @delete="deleteProduct"
-    >
-      <template #cell-category="{ item }">
-        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-          {{ item.category?.name || 'No Category' }}
-        </span>
-      </template>
-      
-      <template #cell-price="{ value }">
-        ${{ parseFloat(value).toFixed(2) }}
-      </template>
-      
-      <template #cell-is_available="{ value }">
-        <span :class="value ? 'text-green-600' : 'text-red-600'">
-          {{ value ? 'Available' : 'Unavailable' }}
-        </span>
-      </template>
-    </DataTable>
+    <div v-else class="table-container">
+      <DataTable
+        :columns="columns"
+        :data="filteredProducts"
+        @view="viewProduct"
+        @edit="editProduct"
+        @delete="deleteProduct"
+      >
+        <template #cell-category="{ item }">
+          <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+            {{ item.category?.name || 'No Category' }}
+          </span>
+        </template>
+        
+        <template #cell-price="{ value }">
+          <span class="font-medium text-green-600">
+            ${{ parseFloat(value).toFixed(2) }}
+          </span>
+        </template>
+        
+        <template #cell-is_available="{ value }">
+          <span :class="value ? 'text-green-600' : 'text-red-600'" class="font-medium">
+            {{ value ? 'Available' : 'Unavailable' }}
+          </span>
+        </template>
+
+        <template #actions="{ item }">
+          <div class="flex space-x-2">
+            <SecondaryButton @click="viewProduct(item)" class="text-xs px-2 py-1">
+              <EyeIcon class="h-3 w-3 mr-1" />
+              View
+            </SecondaryButton>
+            <SecondaryButton @click="editProduct(item)" class="text-xs px-2 py-1">
+              <PencilIcon class="h-3 w-3 mr-1" />
+              Edit
+            </SecondaryButton>
+            <DangerButton @click="deleteProduct(item)" class="text-xs px-2 py-1">
+              <TrashIcon class="h-3 w-3 mr-1" />
+              Delete
+            </DangerButton>
+          </div>
+        </template>
+      </DataTable>
+    </div>
 
     <!-- Create/Edit Modal -->
     <Modal
@@ -91,6 +114,14 @@ import ProductForm from '@/components/ProductForm.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import DangerButton from '@/components/DangerButton.vue'
+import { 
+  MagnifyingGlassIcon, 
+  PlusIcon, 
+  EyeIcon, 
+  PencilIcon, 
+  TrashIcon 
+} from '@heroicons/vue/24/outline'
 import { productService } from '@/services/products'
 import { categoryService } from '@/services/categories'
 
