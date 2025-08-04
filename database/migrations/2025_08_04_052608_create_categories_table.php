@@ -6,20 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique(); // Field UUID
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true); // Field Boolean
             $table->timestamps();
+            $table->softDeletes(); // Untuk fitur Soft Deletes
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('categories');
