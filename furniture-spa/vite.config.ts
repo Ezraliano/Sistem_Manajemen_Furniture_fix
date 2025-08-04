@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
+import postcssImport from 'postcss-import'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,6 +21,7 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
+        postcssImport,
         tailwindcss,
         autoprefixer,
       ],
