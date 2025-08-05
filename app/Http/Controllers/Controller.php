@@ -12,12 +12,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // ... (fungsi register tidak perlu diubah)
+
     public function register(Request $request)
     {
         $request->validate([
@@ -26,11 +22,9 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        // Cari role 'user'. Asumsikan role ini ada dari seeder.
         $userRole = Role::where('name', 'user')->first();
 
         if (!$userRole) {
-            // Jika role tidak ditemukan, kirim error
             return response()->json(['message' => 'Default user role not found.'], 500);
         }
 
@@ -38,22 +32,18 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $userRole->id, // Tetapkan role_id default
+            'role_id' => $userRole->id,
         ]);
 
-        // Login pengguna setelah registrasi
         Auth::login($user);
 
-        return response()->noContent();
+        // Muat relasi role setelah login
+        $user->load('role');
+
+        return response()->json($user);
     }
 
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
-     */
+
     public function login(Request $request)
     {
         $request->validate([
@@ -63,7 +53,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
-            return response()->noContent();
+
+            // --- TAMBAHKAN BAGIAN INI ---
+            // Ambil user yang sedang login dan muat relasi rolenya
+            $user = Auth::user()->load('role');
+            return response()->json($user);
+            // --- AKHIR BAGIAN TAMBAHAN ---
         }
 
         throw ValidationException::withMessages([
@@ -71,12 +66,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // ... (fungsi logout tidak perlu diubah)
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();

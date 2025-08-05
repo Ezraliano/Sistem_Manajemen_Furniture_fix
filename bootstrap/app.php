@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\HandleCors; // <-- 1. TAMBAHKAN INI
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,7 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // --- AWAL DARI KODE YANG DITAMBAHKAN UNTUK SANCTUM SPA ---
+        // --- AWAL DARI KODE YANG DIPERBARUI ---
+
+        // Menambahkan middleware CORS ke semua rute.
+        // Ini akan menangani header 'Access-Control-Allow-Origin'.
+        $middleware->use([
+             HandleCors::class,
+        ]);
 
         // Middleware ini memastikan bahwa rute API Anda akan menggunakan session state,
         // yang penting untuk otentikasi SPA dengan Sanctum.
@@ -25,13 +32,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         // Memberi pengecualian pada rute CSRF cookie Sanctum dari verifikasi token CSRF.
-        // Ini diperlukan agar frontend bisa mendapatkan cookie CSRF pertama kali.
         $middleware->validateCsrfTokens(except: [
             'sanctum/csrf-cookie',
-            // Tambahkan rute lain yang tidak memerlukan CSRF di sini jika ada
         ]);
 
-        // --- AKHIR DARI KODE YANG DITAMBAHKAN ---
+        // --- AKHIR DARI KODE YANG DIPERBARUI ---
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

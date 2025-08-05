@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Menggunakan foreignUuid untuk terhubung ke tabel roles
+            // Menggunakan foreignUuid untuk terhubung ke tabel roles yang primary key-nya UUID
             $table->foreignUuid('role_id')->constrained('roles');
         });
     }
@@ -23,6 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            // Perintah untuk menghapus relasi dan kolom dengan benar
             $table->dropForeign(['role_id']);
             $table->dropColumn('role_id');
         });
