@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Panggil RoleSeeder PERTAMA agar tabel roles terisi
+        $this->call(RoleSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Panggil UserSeeder KEDUA, yang akan menggunakan roles yang sudah ada
+        $this->call(UserSeeder::class);
+
+        // Anda bisa menambahkan seeder lain di sini jika perlu
+        // $this->call(ProductSeeder::class);
+        // $this->call(CategorySeeder::class);
     }
 }

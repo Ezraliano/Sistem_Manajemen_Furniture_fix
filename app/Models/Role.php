@@ -2,17 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids; // <-- 1. TAMBAHKAN INI
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasUuids; // <-- 2. TAMBAHKAN HasUuids DI SINI
 
-    protected $guarded = ['id'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        // Anda tidak perlu menambahkan 'uuid' di sini, karena akan diisi otomatis
+    ];
 
-    // Relasi: Satu Role memiliki banyak User
+    /**
+     * Get the users for the role.
+     */
     public function users()
     {
         return $this->hasMany(User::class);
