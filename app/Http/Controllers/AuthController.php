@@ -20,11 +20,7 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $userRole = Role::where('name', 'user')->first();
-
-        if (!$userRole) {
-            return response()->json(['message' => 'Default user role not found.'], 500);
-        }
+        $userRole = Role::where('name', 'user')->firstOrFail();
 
         $user = User::create([
             'name' => $request->name,
@@ -34,11 +30,15 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-
-        // Load role relationship and return user data
         $user->load('role');
+        
+        // Create Sanctum token for API access
+        $token = $user->createToken('auth-token')->plainTextToken;
 
-        return response()->json($user);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
     public function login(Request $request)
@@ -51,9 +51,15 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
 
-            // Get authenticated user with role relationship
             $user = Auth::user()->load('role');
-            return response()->json($user);
+            
+            // Create Sanctum token for API access
+            $token = $user->createToken('auth-token')->plainTextToken;
+            
+            return response()->json([
+                'user' => $user,
+                'token' => $token
+            ]);
         }
 
         throw ValidationException::withMessages([
@@ -63,10 +69,21 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // Revoke all tokens for the user
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+        }
+        
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
         return response()->noContent();
+    }
+
+    public function getUser(Request $request)
+    {
+        // Pastikan relasi role selalu terkirim saat mengambil data user
+        return $request->user()->load('role');
     }
 }
