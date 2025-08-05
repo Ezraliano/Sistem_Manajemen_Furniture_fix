@@ -1,125 +1,131 @@
 <script setup>
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import GuestLayout from '@/layouts/GuestLayout.vue'
+import PrimaryButton from '@/components/PrimaryButton.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
-const authStore = useAuthStore();
-const router = useRouter();
+const authStore = useAuthStore()
+const router = useRouter()
 
 const form = ref({
   name: '',
   email: '',
   password: '',
   password_confirmation: '',
-});
+})
 
-const errors = ref({});
+const errors = ref({})
+const loading = ref(false)
 
 const handleRegister = async () => {
-  errors.value = {};
+  loading.value = true
+  errors.value = {}
+  
   try {
-    await authStore.handleRegister(form.value);
-    router.push({ name: 'dashboard' });
+    await authStore.handleRegister(form.value)
+    router.push({ name: 'dashboard' })
   } catch (error) {
     if (error.response && error.response.status === 422) {
-      errors.value = error.response.data.errors;
+      errors.value = error.response.data.errors
     } else {
-      console.error('Registration failed:', error);
+      console.error('Registration failed:', error)
     }
+  } finally {
+    loading.value = false
   }
-};
+}
 </script>
 
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Create a new account
-      </h2>
+  <GuestLayout>
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Buat Akun Baru</h2>
+      <p class="mt-2 text-gray-600">Bergabung dengan sistem manajemen furniture</p>
     </div>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" @submit.prevent="handleRegister">
-        <div>
-          <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
-          <div class="mt-2">
-            <input
-              id="name"
-              v-model="form.name"
-              name="name"
-              type="text"
-              autocomplete="name"
-              required
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-            <div v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name[0] }}</div>
-          </div>
-        </div>
+    <form class="space-y-6" @submit.prevent="handleRegister">
+      <div>
+        <label for="name" class="form-label">Nama Lengkap</label>
+        <input
+          id="name"
+          v-model="form.name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          class="form-input"
+          :class="{ 'border-red-500': errors.name }"
+          placeholder="Masukkan nama lengkap Anda"
+        />
+        <div v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name[0] }}</div>
+      </div>
 
-        <div>
-          <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-          <div class="mt-2">
-            <input
-              id="email"
-              v-model="form.email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-            <div v-if="errors.email" class="text-sm text-red-600 mt-1">{{ errors.email[0] }}</div>
-          </div>
-        </div>
+      <div>
+        <label for="email" class="form-label">Alamat Email</label>
+        <input
+          id="email"
+          v-model="form.email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          class="form-input"
+          :class="{ 'border-red-500': errors.email }"
+          placeholder="Masukkan alamat email Anda"
+        />
+        <div v-if="errors.email" class="text-sm text-red-600 mt-1">{{ errors.email[0] }}</div>
+      </div>
 
-        <div>
-          <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-          <div class="mt-2">
-            <input
-              id="password"
-              v-model="form.password"
-              name="password"
-              type="password"
-              autocomplete="new-password"
-              required
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-             <div v-if="errors.password" class="text-sm text-red-600 mt-1">{{ errors.password[0] }}</div>
-          </div>
-        </div>
+      <div>
+        <label for="password" class="form-label">Kata Sandi</label>
+        <input
+          id="password"
+          v-model="form.password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          required
+          class="form-input"
+          :class="{ 'border-red-500': errors.password }"
+          placeholder="Masukkan kata sandi"
+        />
+        <div v-if="errors.password" class="text-sm text-red-600 mt-1">{{ errors.password[0] }}</div>
+      </div>
 
-        <div>
-          <label for="password_confirmation" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
-          <div class="mt-2">
-            <input
-              id="password_confirmation"
-              v-model="form.password_confirmation"
-              name="password_confirmation"
-              type="password"
-              autocomplete="new-password"
-              required
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
+      <div>
+        <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
+        <input
+          id="password_confirmation"
+          v-model="form.password_confirmation"
+          name="password_confirmation"
+          type="password"
+          autocomplete="new-password"
+          required
+          class="form-input"
+          placeholder="Konfirmasi kata sandi Anda"
+        />
+      </div>
 
-        <div>
-          <button
-            type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Register
-          </button>
-        </div>
-      </form>
+      <div>
+        <PrimaryButton
+          type="submit"
+          :disabled="loading"
+          class="w-full justify-center"
+        >
+          <LoadingSpinner v-if="loading" size="sm" container-class="" class="mr-2" />
+          {{ loading ? 'Mendaftar...' : 'Daftar' }}
+        </PrimaryButton>
+      </div>
+    </form>
 
-      <p class="mt-10 text-center text-sm text-gray-500">
-        Already a member?
-        {{ ' ' }}
-        <router-link :to="{ name: 'login' }" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-            Sign in here
-        </router-link>
-      </p>
-    </div>
-  </div>
+    <p class="mt-6 text-center text-sm text-gray-500">
+      Sudah punya akun?
+      {{ ' ' }}
+      <router-link :to="{ name: 'login' }" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+        Masuk di sini
+      </router-link>
+    </p>
+  </GuestLayout>
 </template>

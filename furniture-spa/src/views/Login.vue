@@ -25,17 +25,16 @@ const handleLogin = async () => {
   generalError.value = ''
 
   try {
-    await authStore.handleLogin(form.value) // Menggunakan handleLogin dari store
+    await authStore.handleLogin(form.value)
     router.push('/dashboard')
   } catch (error) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors || {}
-       // Menampilkan error umum jika backend mengirim pesan di root error
       if (error.response.data.message) {
-        generalError.value = error.response.data.message;
+        generalError.value = error.response.data.message
       }
     } else {
-      generalError.value = 'An error occurred. Please check your credentials or try again later.'
+      generalError.value = 'Terjadi kesalahan. Silakan periksa kredensial Anda atau coba lagi nanti.'
     }
   } finally {
     loading.value = false
@@ -45,11 +44,14 @@ const handleLogin = async () => {
 
 <template>
   <GuestLayout>
-    <template #title>Sign in to your account</template>
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Masuk ke Akun Anda</h2>
+      <p class="mt-2 text-gray-600">Kelola sistem furniture Anda</p>
+    </div>
 
     <form @submit.prevent="handleLogin" class="space-y-6">
       <div>
-        <label for="email" class="form-label">Email address</label>
+        <label for="email" class="form-label">Alamat Email</label>
         <input
           id="email"
           v-model="form.email"
@@ -57,13 +59,13 @@ const handleLogin = async () => {
           required
           class="form-input"
           :class="{ 'border-red-500': errors.email }"
-          placeholder="Enter your email"
+          placeholder="Masukkan email Anda"
         />
         <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
       </div>
 
       <div>
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label">Kata Sandi</label>
         <input
           id="password"
           v-model="form.password"
@@ -71,7 +73,7 @@ const handleLogin = async () => {
           required
           class="form-input"
           :class="{ 'border-red-500': errors.password }"
-          placeholder="Enter your password"
+          placeholder="Masukkan kata sandi Anda"
         />
         <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password[0] }}</p>
       </div>
@@ -94,17 +96,26 @@ const handleLogin = async () => {
           class="w-full justify-center"
         >
           <LoadingSpinner v-if="loading" size="sm" container-class="" class="mr-2" />
-          {{ loading ? 'Signing in...' : 'Sign in' }}
+          {{ loading ? 'Masuk...' : 'Masuk' }}
         </PrimaryButton>
       </div>
     </form>
 
+    <!-- Demo Accounts Info -->
+    <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+      <h3 class="text-sm font-medium text-blue-800 mb-2">Akun Demo:</h3>
+      <div class="text-xs text-blue-700 space-y-1">
+        <p><strong>Admin:</strong> admin@furniture.com / admin123</p>
+        <p><strong>User:</strong> user@furniture.com / user123</p>
+      </div>
+    </div>
+
     <!-- Link ke Halaman Register -->
-    <p class="mt-10 text-center text-sm text-gray-500">
-      Not a member?
+    <p class="mt-6 text-center text-sm text-gray-500">
+      Belum punya akun?
       {{ ' ' }}
       <router-link :to="{ name: 'register' }" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-        Create an account
+        Buat akun baru
       </router-link>
     </p>
   </GuestLayout>

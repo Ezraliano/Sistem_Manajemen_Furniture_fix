@@ -1,40 +1,3 @@
-<script setup>
-import { computed } from 'vue';
-
-// --- TAMBAHKAN BAGIAN INI UNTUK MENDEFINISIKAN PROPS ---
-const props = defineProps({
-  size: {
-    type: String,
-    default: 'md', // sm, md, lg
-  },
-  color: {
-    type: String,
-    default: 'indigo',
-  },
-  containerClass: {
-    type: String,
-    default: 'flex justify-center items-center',
-  },
-});
-// --- AKHIR BAGIAN TAMBAHAN ---
-
-const sizeClass = computed(() => {
-  return {
-    sm: 'h-5 w-5',
-    md: 'h-8 w-8',
-    lg: 'h-12 w-12',
-  }[props.size];
-});
-
-const colorClass = computed(() => {
-  return {
-    indigo: 'text-indigo-600',
-    white: 'text-white',
-    gray: 'text-gray-600',
-  }[props.color];
-});
-</script>
-
 <template>
   <div :class="containerClass">
     <svg
@@ -60,3 +23,38 @@ const colorClass = computed(() => {
     </svg>
   </div>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md', // sm, md, lg
+  },
+  color: {
+    type: String,
+    default: 'indigo',
+  },
+  containerClass: {
+    type: String,
+    default: 'flex justify-center items-center',
+  },
+})
+
+const sizeClass = computed(() => {
+  return {
+    sm: 'h-5 w-5',
+    md: 'h-8 w-8',
+    lg: 'h-12 w-12',
+  }[props.size]
+})
+
+const colorClass = computed(() => {
+  return {
+    indigo: 'text-indigo-600',
+    white: 'text-white',
+    gray: 'text-gray-600',
+  }[props.color]
+})
+</script>

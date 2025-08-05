@@ -1,16 +1,19 @@
 import api from './api'
-import axios from 'axios'
 
 export const authService = {
   async getCsrfCookie() {
-    await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-      withCredentials: true
-    })
+    await api.get('/sanctum/csrf-cookie')
   },
 
   async login(credentials) {
     await this.getCsrfCookie()
     const response = await api.post('/login', credentials)
+    return response.data
+  },
+
+  async register(credentials) {
+    await this.getCsrfCookie()
+    const response = await api.post('/register', credentials)
     return response.data
   },
 

@@ -11,8 +11,8 @@
           </div>
         </div>
         <div class="ml-4">
-          <h1 class="text-3xl font-bold text-gray-900">Welcome back, {{ authStore.user?.name }}!</h1>
-          <p class="mt-1 text-gray-600">Here's what's happening with your furniture business today.</p>
+          <h1 class="text-3xl font-bold text-gray-900">Selamat datang kembali, {{ authStore.user?.name }}!</h1>
+          <p class="mt-1 text-gray-600">Berikut yang terjadi dengan bisnis furniture Anda hari ini.</p>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="ml-4 w-0 flex-1">
               <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Total Products</dt>
+                <dt class="text-sm font-medium text-gray-500 truncate">Total Produk</dt>
                 <dd class="text-2xl font-bold text-gray-900">{{ stats.products || 0 }}</dd>
               </dl>
             </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="ml-4 w-0 flex-1">
               <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Categories</dt>
+                <dt class="text-sm font-medium text-gray-500 truncate">Kategori</dt>
                 <dd class="text-2xl font-bold text-gray-900">{{ stats.categories || 0 }}</dd>
               </dl>
             </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="ml-4 w-0 flex-1">
               <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Orders</dt>
+                <dt class="text-sm font-medium text-gray-500 truncate">Pesanan</dt>
                 <dd class="text-2xl font-bold text-gray-900">{{ stats.orders || 0 }}</dd>
               </dl>
             </div>
@@ -83,7 +83,7 @@
             </div>
             <div class="ml-4 w-0 flex-1">
               <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Users</dt>
+                <dt class="text-sm font-medium text-gray-500 truncate">Pengguna</dt>
                 <dd class="text-2xl font-bold text-gray-900">{{ stats.users || 0 }}</dd>
               </dl>
             </div>
@@ -95,79 +95,7 @@
     <!-- Quick Actions -->
     <div class="bg-white shadow-sm rounded-lg border border-gray-200">
       <div class="px-6 py-4 border-b border-gray-200">
-      <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-      <p class="mt-2 text-gray-600">Welcome back, {{ authStore.user?.name }}!</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <CubeIcon class="h-6 w-6 text-gray-400" />
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Total Products</dt>
-                <dd class="text-lg font-medium text-gray-900">{{ stats.products || 0 }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <TagIcon class="h-6 w-6 text-gray-400" />
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Categories</dt>
-                <dd class="text-lg font-medium text-gray-900">{{ stats.categories || 0 }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <ShoppingCartIcon class="h-6 w-6 text-gray-400" />
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Orders</dt>
-                <dd class="text-lg font-medium text-gray-900">{{ stats.orders || 0 }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg" v-if="authStore.isAdmin">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <UsersIcon class="h-6 w-6 text-gray-400" />
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Users</dt>
-                <dd class="text-lg font-medium text-gray-900">{{ stats.users || 0 }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Aksi Cepat</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <router-link
             to="/products"
@@ -180,10 +108,10 @@
             </div>
             <div class="mt-4">
               <h3 class="text-lg font-medium text-gray-900">
-                Manage Products
+                Kelola Produk
               </h3>
               <p class="mt-2 text-sm text-gray-500">
-                Add, edit, and organize your furniture inventory.
+                Tambah, edit, dan atur inventori furniture Anda.
               </p>
             </div>
           </router-link>
@@ -199,10 +127,10 @@
             </div>
             <div class="mt-4">
               <h3 class="text-lg font-medium text-gray-900">
-                Manage Categories
+                Kelola Kategori
               </h3>
               <p class="mt-2 text-sm text-gray-500">
-                Organize products into categories.
+                Atur produk ke dalam kategori.
               </p>
             </div>
           </router-link>
@@ -218,10 +146,10 @@
             </div>
             <div class="mt-4">
               <h3 class="text-lg font-medium text-gray-900">
-                View Orders
+                Lihat Pesanan
               </h3>
               <p class="mt-2 text-sm text-gray-500">
-                Process and track customer orders.
+                Proses dan lacak pesanan pelanggan.
               </p>
             </div>
           </router-link>
@@ -238,10 +166,10 @@
             </div>
             <div class="mt-4">
               <h3 class="text-lg font-medium text-gray-900">
-                Manage Users
+                Kelola Pengguna
               </h3>
               <p class="mt-2 text-sm text-gray-500">
-                Control user access and permissions.
+                Kontrol akses dan izin pengguna.
               </p>
             </div>
           </router-link>

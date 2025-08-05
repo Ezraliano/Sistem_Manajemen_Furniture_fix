@@ -1,64 +1,78 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import api from '@/services/api' // Menggunakan instance api yang terpusat
+import { authService } from '@/services/auth'
 
 export const useAuthStore = defineStore('auth', () => {
-  // Mengambil user dari localStorage saat inisialisasi jika ada
+  // Initialize user from localStorage
   const user = ref(JSON.parse(localStorage.getItem('user')) || null)
 
   const isAuthenticated = computed(() => !!user.value)
-  
-  // Pengecekan role admin yang lebih aman
   const isAdmin = computed(() => user.value?.role?.name === 'admin')
 
   /**
-   * Mengambil data pengguna dari server dan menyimpannya di state dan localStorage.
+   * Get current user data from server
    */
   async function getUser() {
     try {
-      const response = await api.get('/user')
-      user.value = response.data
-      localStorage.setItem('user', JSON.stringify(response.data))
+      const userData = await authService.getUser()
+      user.value = userData
+      // Persist to localStorage immediately
+      localStorage.setItem('user', JSON.stringify(userData))
+      return userData
     } catch (error) {
-      // Jika gagal (misal, session habis), bersihkan state
+      // Clear state if request fails
       user.value = null
       localStorage.removeItem('user')
-      console.error('Failed to fetch user:', error)
-      throw error // Lemparkan error agar bisa ditangkap di komponen
+      throw error
     }
   }
 
   /**
-   * Menangani proses login.
+   * Handle user login
    */
   async function handleLogin(credentials) {
-    // Selalu dapatkan CSRF cookie sebelum login/register
-    await api.get('/sanctum/csrf-cookie')
-    await api.post('/login', credentials)
-    // Setelah berhasil login, ambil data pengguna
-    await getUser()
+    try {
+      const userData = await authService.login(credentials)
+      user.value = userData
+      // Persist to localStorage immediately after successful login
+      localStorage.setItem('user', JSON.stringify(userData))
+      return userData
+    } catch (error) {
+      // Clear state on login failure
+      user.value = null
+      localStorage.removeItem('user')
+      throw error
+    }
   }
 
   /**
-   * Menangani proses registrasi.
+   * Handle user registration
    */
   async function handleRegister(credentials) {
-    await api.get('/sanctum/csrf-cookie')
-    await api.post('/register', credentials)
-    // Setelah berhasil register, langsung ambil data pengguna (auto-login)
-    await getUser()
+    try {
+      const userData = await authService.register(credentials)
+      user.value = userData
+      // Persist to localStorage immediately after successful registration
+      localStorage.setItem('user', JSON.stringify(userData))
+      return userData
+    } catch (error) {
+      // Clear state on registration failure
+      user.value = null
+      localStorage.removeItem('user')
+      throw error
+    }
   }
 
   /**
-   * Menangani proses logout.
+   * Handle user logout
    */
   async function handleLogout() {
     try {
-        await api.post('/logout')
+      await authService.logout()
     } finally {
-        // Selalu bersihkan state lokal meskipun request logout gagal
-        user.value = null
-        localStorage.removeItem('user')
+      // Always clear state regardless of API response
+      user.value = null
+      localStorage.removeItem('user')
     }
   }
 

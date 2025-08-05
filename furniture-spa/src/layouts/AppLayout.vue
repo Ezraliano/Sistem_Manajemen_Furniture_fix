@@ -4,7 +4,7 @@
     <aside class="w-64 bg-gray-800 h-full">
       <!-- Logo/Header -->
       <div class="flex items-center justify-center h-16 bg-gray-900">
-        <h1 class="text-white text-xl font-bold">Furniture Admin</h1>
+        <h1 class="text-white text-xl font-bold">Admin Furniture</h1>
       </div>
       
       <!-- Navigation -->
@@ -23,7 +23,7 @@
             class="sidebar-link"
           >
             <UserGroupIcon class="mr-3 h-5 w-5" />
-            Roles
+            Peran
           </router-link>
           
           <router-link
@@ -32,7 +32,7 @@
             class="sidebar-link"
           >
             <UsersIcon class="mr-3 h-5 w-5" />
-            Users
+            Pengguna
           </router-link>
           
           <router-link
@@ -40,7 +40,7 @@
             class="sidebar-link"
           >
             <TagIcon class="mr-3 h-5 w-5" />
-            Categories
+            Kategori
           </router-link>
           
           <router-link
@@ -48,7 +48,7 @@
             class="sidebar-link"
           >
             <CubeIcon class="mr-3 h-5 w-5" />
-            Products
+            Produk
           </router-link>
           
           <router-link
@@ -56,7 +56,7 @@
             class="sidebar-link"
           >
             <ShoppingCartIcon class="mr-3 h-5 w-5" />
-            Orders
+            Pesanan
           </router-link>
         </div>
       </nav>
@@ -78,7 +78,7 @@
           <button
             @click="handleLogout"
             class="ml-3 text-gray-300 hover:text-white transition-colors duration-200"
-            title="Logout"
+            title="Keluar"
           >
             <ArrowRightOnRectangleIcon class="h-5 w-5" />
           </button>
@@ -113,7 +113,7 @@ const router = useRouter()
 
 const handleLogout = async () => {
   try {
-    await authStore.logout()
+    await authStore.handleLogout()
     router.push('/login')
   } catch (error) {
     console.error('Logout error:', error)
